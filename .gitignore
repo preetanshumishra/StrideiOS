@@ -1,0 +1,84 @@
+# Xcode
+*.xcodeproj/xcuserdata/
+xcuserdata/
+*.xcworkspace/xcuserdata/
+DerivedData/
+*.pbxuser
+*.mode1v3
+*.mode2v3
+*.perspectivev3
+*.xcworkspace/xcshareddata/
+*.moved-aside
+build/
+*.hmap
+*.ipa
+*.xcarchive/
+*.xctest/
+
+# CocoaPods
+Pods/
+Podfile.lock
+.pods/
+
+# Swift Package Manager
+.swiftpm/
+.build/
+*.xcframework
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+.VolumeIcon.icns
+ehthumbs.db
+Thumbs.db
+
+# Build artifacts
+*.dSYM/
+*.dsym/
+*.app/
+*.ipa
+*.dSYM
+build/
+DerivedData/
+
+# Test artifacts
+*.xctest/
+*.xctest.dSYM/
+coverage/
+*.profdata
+
+# Environment
+.env
+.env.local
+
+# Temporary files
+.TemporaryItems
+*.tmp
+*.temp
+
+# Xcode specific
+*.xcconfig
+
+# fastlane
+fastlane/report.xml
+fastlane/screenshots
+
+# Signing
+*.p12
+*.key
+*.mobileprovision
+*.provisionprofile
+
+# Crash dumps
+*.crash
+*.hang

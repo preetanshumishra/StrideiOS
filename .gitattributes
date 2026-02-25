@@ -1,0 +1,41 @@
+# Auto detect text files
+* text=auto
+
+# Swift
+*.swift text eol=lf
+
+# Xcode project files
+*.pbxproj merge=union text eol=lf
+*.xcscheme text eol=lf
+
+# Documentation
+*.md text eol=lf
+LICENSE text eol=lf
+*.txt text eol=lf
+
+# Configuration
+*.plist text eol=lf
+*.json text eol=lf
+*.yaml text eol=lf
+*.yml text eol=lf
+
+# Binary files
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.webp binary
+*.pdf binary
+*.ico binary
+*.icns binary
+*.app binary
+*.ipa binary
+*.framework binary
+*.xcframework binary
+*.a binary
+*.dylib binary
+
+# GitHub
+DerivedData/** linguist-vendored linguist-generated
+build/** linguist-vendored linguist-generated
+Pods/** linguist-vendored linguist-generated
