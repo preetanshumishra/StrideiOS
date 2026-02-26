@@ -135,10 +135,12 @@ This minimizes maintenance burden and reduces attack surface.
 ### Environment
 Configure the backend API URL in `Services/NetworkService.swift`:
 ```swift
-private let baseURL = "http://localhost:5001"
+private let baseURL = "https://strideapi-1048111785674.us-central1.run.app" // Production
+// or
+private let baseURL = "http://localhost:5001" // Local development
 ```
 
-For production deployment, update to your server URL.
+The app currently uses the production Cloud Run URL by default.
 
 ## Features
 
