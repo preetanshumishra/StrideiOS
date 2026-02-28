@@ -29,9 +29,27 @@ struct PlaceRow: View {
 
                 Spacer()
 
-                Text("\(place.visitCount) visits")
-                    .font(.caption)
-                    .foregroundColor(.gray)
+                if place.visitCount > 0 {
+                    Text("Visited \(place.visitCount)×")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
+                }
+            }
+
+            if !place.tags.isEmpty {
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(spacing: 4) {
+                        ForEach(place.tags, id: \.self) { tag in
+                            Text(tag)
+                                .font(.caption2)
+                                .padding(.horizontal, 6)
+                                .padding(.vertical, 2)
+                                .background(Color.blue.opacity(0.12))
+                                .foregroundColor(.blue)
+                                .cornerRadius(6)
+                        }
+                    }
+                }
             }
         }
         .padding(.vertical, 4)

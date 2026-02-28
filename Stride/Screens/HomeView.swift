@@ -2,6 +2,7 @@ import SwiftUI
 
 struct HomeView: View {
     @ObservedObject var viewModel: HomeViewModel
+    @State private var showSettings = false
 
     var body: some View {
         NavigationView {
@@ -50,6 +51,54 @@ struct HomeView: View {
                 }
                 .buttonStyle(.plain)
 
+                NavigationLink(destination: CollectionsView(
+                    viewModel: DependencyContainer.shared.makeCollectionsViewModel(),
+                    collectionService: DependencyContainer.shared.collectionService
+                )) {
+                    HStack {
+                        Image(systemName: "folder.fill")
+                            .foregroundColor(.indigo)
+                        Text("Collections")
+                        Spacer()
+                        Image(systemName: "chevron.right")
+                            .foregroundColor(.gray)
+                    }
+                    .padding()
+                    .background(Color(.systemGray6))
+                    .cornerRadius(12)
+                }
+                .buttonStyle(.plain)
+
+                NavigationLink(destination: SmartRouteView(viewModel: DependencyContainer.shared.makeSmartRouteViewModel())) {
+                    HStack {
+                        Image(systemName: "arrow.triangle.turn.up.right.diamond.fill")
+                            .foregroundColor(.blue)
+                        Text("Smart Route")
+                        Spacer()
+                        Image(systemName: "chevron.right")
+                            .foregroundColor(.gray)
+                    }
+                    .padding()
+                    .background(Color(.systemGray6))
+                    .cornerRadius(12)
+                }
+                .buttonStyle(.plain)
+
+                NavigationLink(destination: NearbyView(viewModel: DependencyContainer.shared.makeNearbyViewModel())) {
+                    HStack {
+                        Image(systemName: "location.circle.fill")
+                            .foregroundColor(.purple)
+                        Text("Nearby")
+                        Spacer()
+                        Image(systemName: "chevron.right")
+                            .foregroundColor(.gray)
+                    }
+                    .padding()
+                    .background(Color(.systemGray6))
+                    .cornerRadius(12)
+                }
+                .buttonStyle(.plain)
+
                 Spacer()
 
                 Button(action: {
@@ -67,6 +116,16 @@ struct HomeView: View {
             }
             .padding()
             .navigationTitle("Stride")
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button(action: { showSettings = true }) {
+                        Image(systemName: "gearshape")
+                    }
+                }
+            }
+            .sheet(isPresented: $showSettings) {
+                SettingsView(viewModel: DependencyContainer.shared.makeSettingsViewModel(authService: viewModel.authService))
+            }
         }
     }
 }

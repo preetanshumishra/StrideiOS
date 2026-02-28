@@ -13,12 +13,14 @@ struct Errand: Codable, Identifiable {
     let completedAt: String?
     let createdAt: String
     let updatedAt: String
+    let distanceKm: Double?
 
     enum CodingKeys: String, CodingKey {
         case id = "_id"
         case userId, title, category, linkedPlaceId
         case priority, deadline, recurring, status
         case completedAt, createdAt, updatedAt
+        case distanceKm
     }
 }
 

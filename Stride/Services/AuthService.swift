@@ -66,4 +66,22 @@ final class AuthService: ObservableObject {
             isLoggedIn = false
         }
     }
+
+    func updateProfile(firstName: String, lastName: String, email: String) async throws -> User {
+        let request = UpdateProfileRequest(firstName: firstName, lastName: lastName, email: email)
+        let apiResponse: ApiResponse<User> = try await networkService.updateProfile(request: request)
+        guard let data = apiResponse.data else { throw URLError(.cannotParseResponse) }
+        self.user = data
+        return data
+    }
+
+    func changePassword(currentPassword: String, newPassword: String) async throws {
+        let request = ChangePasswordRequest(currentPassword: currentPassword, newPassword: newPassword)
+        let _: ApiResponse<String> = try await networkService.changePassword(request: request)
+    }
+
+    func deleteAccount() async throws {
+        let _: ApiResponse<String> = try await networkService.deleteAccount()
+        clearAuthentication()
+    }
 }

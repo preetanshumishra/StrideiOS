@@ -7,12 +7,18 @@ options:
 settings:
   SWIFT_VERSION: "6.0"
   GENERATE_INFOPLIST_FILE: false
+packages:
+  WoosmapGeofencing:
+    url: https://github.com/Woosmap/geofencing-ios-sdk-spm-release.git
+    from: "4.0.0"
 targets:
   Stride:
     type: application
     platform: iOS
     sources:
       - path: Stride
+    dependencies:
+      - package: WoosmapGeofencing
     settings:
       INFOPLIST_FILE: Stride/Info.plist
       PRODUCT_BUNDLE_IDENTIFIER: com.preetanshumishra.stride

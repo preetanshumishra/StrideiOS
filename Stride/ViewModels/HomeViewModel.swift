@@ -2,7 +2,7 @@ import Foundation
 
 @MainActor
 final class HomeViewModel: ObservableObject {
-    private let authService: AuthService
+    let authService: AuthService
 
     init(authService: AuthService) {
         self.authService = authService

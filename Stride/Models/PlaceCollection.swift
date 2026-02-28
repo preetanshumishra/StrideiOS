@@ -4,6 +4,7 @@ struct PlaceCollection: Codable, Identifiable {
     let id: String
     let userId: String
     let name: String
+    let description: String?
     let icon: String
     let shared: Bool
     let createdAt: String
@@ -11,7 +12,7 @@ struct PlaceCollection: Codable, Identifiable {
 
     enum CodingKeys: String, CodingKey {
         case id = "_id"
-        case userId, name, icon, shared
+        case userId, name, description, icon, shared
         case createdAt, updatedAt
     }
 }

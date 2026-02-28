@@ -17,6 +17,7 @@ struct Place: Codable, Identifiable {
     let source: String
     let createdAt: String
     let updatedAt: String
+    let distanceKm: Double?
 
     enum CodingKeys: String, CodingKey {
         case id = "_id"
@@ -24,5 +25,6 @@ struct Place: Codable, Identifiable {
         case category, tags, notes, rating, collectionId
         case visitCount, lastVisited, source
         case createdAt, updatedAt
+        case distanceKm
     }
 }

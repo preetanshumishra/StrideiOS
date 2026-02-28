@@ -1,0 +1,15 @@
+{
+  "originHash" : "b65df82dbe8dbc652ac3936a33f33405d43e1df7d9db020ffaf3a2520e74513f",
+  "pins" : [
+    {
+      "identity" : "geofencing-ios-sdk-spm-release",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Woosmap/geofencing-ios-sdk-spm-release.git",
+      "state" : {
+        "revision" : "b739db90a5a2bcd4d3c60a866585aa79ef42bb5b",
+        "version" : "4.5.3"
+      }
+    }
+  ],
+  "version" : 3
+}

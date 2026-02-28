@@ -1,10 +1,10 @@
 # Stride iOS
 
-Native iOS application for smart errand management and personal place saving. Built with Swift, SwiftUI, and modern iOS development practices.
+Native iOS application for smart errand management and personal place saving, powered by the Woosmap Geofencing SDK for automatic visit detection and geofence alerts. Built with Swift, SwiftUI, and modern iOS development practices.
 
 ## Overview
 
-Stride iOS is a native iOS app providing intelligent errand and place management capabilities. The app follows the MVVM architecture pattern with manual constructor-based dependency injection.
+Stride iOS is a native iOS app providing intelligent errand and place management capabilities. The app follows the MVVM architecture pattern with manual constructor-based dependency injection. It integrates the Woosmap Geofencing SDK to passively detect when you visit a saved place and to alert you when you're nearby with pending errands.
 
 ## Tech Stack
 
@@ -14,7 +14,9 @@ Stride iOS is a native iOS app providing intelligent errand and place management
 - **Dependency Injection:** Manual constructor-based DI
 - **HTTP Client:** URLSession (native)
 - **Secure Storage:** iOS Keychain (native)
-- **Project Management:** xcodegen
+- **Location SDK:** WoosmapGeofencing (SPM) — visit detection + custom geofencing
+- **Notifications:** UNUserNotificationCenter — local push alerts on geofence entry
+- **Project Management:** XcodeGen
 
 ## Project Structure
 
@@ -22,36 +24,50 @@ Stride iOS is a native iOS app providing intelligent errand and place management
 StrideiOS/
 ├── Stride/
 │   ├── App/
-│   │   └── StrideApp.swift           # SwiftUI entry point
+│   │   └── StrideApp.swift           # SwiftUI entry point, tracking lifecycle
 │   ├── DI/
 │   │   └── DependencyContainer.swift  # Manual DI factory
 │   ├── Models/
 │   │   ├── User.swift
 │   │   ├── Place.swift
 │   │   ├── Errand.swift
+│   │   ├── NearbyData.swift
 │   │   └── PlaceCollection.swift
 │   ├── Screens/
 │   │   ├── LoginView.swift
 │   │   ├── RegisterView.swift
 │   │   ├── HomeView.swift
 │   │   ├── PlacesView.swift
-│   │   └── ErrandsView.swift
+│   │   ├── ErrandsView.swift
+│   │   ├── SmartRouteView.swift
+│   │   ├── NearbyView.swift
+│   │   ├── CollectionsView.swift
+│   │   └── SettingsView.swift
 │   ├── Services/
 │   │   ├── AuthService.swift
 │   │   ├── PlaceService.swift
 │   │   ├── ErrandService.swift
-│   │   └── NetworkService.swift
+│   │   ├── NearbyService.swift
+│   │   ├── RouteService.swift
+│   │   ├── CollectionService.swift
+│   │   ├── NetworkService.swift
+│   │   └── WoosmapManager.swift      # Visit detection + geofence alerts
 │   ├── ViewModels/
 │   │   ├── LoginViewModel.swift
 │   │   ├── RegisterViewModel.swift
 │   │   ├── HomeViewModel.swift
 │   │   ├── PlacesViewModel.swift
-│   │   └── ErrandsViewModel.swift
+│   │   ├── ErrandsViewModel.swift
+│   │   ├── SmartRouteViewModel.swift
+│   │   ├── NearbyViewModel.swift
+│   │   ├── CollectionsViewModel.swift
+│   │   └── SettingsViewModel.swift
 │   ├── Utils/
-│   │   └── KeychainManager.swift
+│   │   ├── KeychainManager.swift
+│   │   └── LocationManager.swift
 │   └── Info.plist
 ├── Stride.xcodeproj/
-├── project.yml                       # xcodegen configuration
+├── project.yml                       # XcodeGen configuration (includes SPM packages)
 └── .gitignore
 ```
 
@@ -62,6 +78,7 @@ StrideiOS/
 - macOS 12.0 or later
 - Xcode 15.0 or later
 - iOS 16.0+ device or simulator
+- XcodeGen (`brew install xcodegen`)
 
 ### Installation
 
@@ -70,65 +87,71 @@ StrideiOS/
    cd StrideiOS
    ```
 
-2. **Open project (SPM packages managed automatically):**
+2. **Regenerate the Xcode project (resolves SPM packages):**
+   ```bash
+   npx xcodegen generate
+   # or: xcodegen generate
+   ```
+
+3. **Open project (SPM packages are resolved automatically):**
    ```bash
    open Stride.xcodeproj
    ```
 
-3. **Select target and build:**
+4. **Select target and build:**
    - Select "Stride" scheme
    - Select iOS Simulator or device
    - Press Cmd+B to build or Cmd+R to run
+
+> **Note:** Always run `xcodegen generate` after pulling changes that modify `project.yml` (e.g., new SPM packages).
 
 ## Build & Run
 
 ### Using Xcode
 ```bash
-# Open project
-open Stride.xcodeproj
+# Regenerate project and open
+xcodegen generate && open Stride.xcodeproj
 
-# Build
+# Build from command line
 xcodebuild -project Stride.xcodeproj -scheme Stride -configuration Debug
 
 # Build for iPhone Simulator
 xcodebuild -project Stride.xcodeproj -scheme Stride -sdk iphonesimulator
 ```
 
-### Using Command Line
-```bash
-# Build
-cd StrideiOS
-xcodebuild -project Stride.xcodeproj -scheme Stride -configuration Debug -sdk iphonesimulator
-```
-
 ## Architecture
 
 ### MVVM Pattern
-- **View:** SwiftUI components (LoginView, RegisterView, HomeView, PlacesView, ErrandsView)
-- **ViewModel:** State management with @Published properties
-- **Model:** User, Place, Errand, and PlaceCollection objects
+- **View:** SwiftUI components
+- **ViewModel:** State management with `@Published` properties
+- **Model:** User, Place, Errand, PlaceCollection, NearbyData
 
 ### Dependency Injection
 Uses manual constructor-based dependency injection:
-- `DependencyContainer`: Simple factory class for creating services and ViewModels
+- `DependencyContainer`: Single factory class with `lazy var` singletons for all services and managers
 - Explicit constructor injection with no runtime reflection
 - All dependencies are type-safe and compile-time verified
+
+### Woosmap Integration
+`WoosmapManager` is a `@MainActor`-isolated singleton owned by `DependencyContainer`:
+- **Visit detection:** `VisitServiceDelegate.processVisit` → Haversine match against saved places (100m threshold) → `PATCH /api/v1/places/:id/visit`
+- **Geofencing:** Up to 7 custom circular geofences (100m radius) registered around saved places; `RegionsServiceDelegate.didEnterPOIRegion` → `POST /api/v1/nearby` → local `UNUserNotification`
+- **Tracking lifecycle:** Started on login, stopped on logout via `.onChange(of: authService.isLoggedIn)` in `StrideApp`
+- **API key:** `""` (visit detection and custom geofencing work without a Woosmap store key)
+- **Swift 6 safety:** Delegate inner classes use `@unchecked Sendable` + `Task { @MainActor in ... }` pattern, identical to the existing `LocationDelegate`
 
 ### Data Flow
 1. **Views** trigger actions on **ViewModels**
 2. **ViewModels** call **Services** to fetch/process data
 3. **Services** use **NetworkService** for API calls
 4. **KeychainManager** handles secure token storage
-5. **@Published** properties update Views automatically
+5. **WoosmapManager** runs passively in the background for location events
+6. **`@Published`** properties update Views automatically
 
 ## Dependencies
 
-The project uses **zero external dependencies**. All functionality is built on native iOS frameworks:
-- **Security Framework:** Native iOS Keychain for secure token storage
-- **Foundation:** Core utilities and networking (URLSession)
-- **SwiftUI:** Native UI framework
-
-This minimizes maintenance burden and reduces attack surface.
+- **WoosmapGeofencing** (SPM) — `https://github.com/Woosmap/geofencing-ios-sdk-spm-release.git` from `4.0.0`
+- All other functionality is built on native iOS frameworks (Security, Foundation, CoreLocation, UserNotifications, SwiftUI)
 
 ## Configuration
 
@@ -140,19 +163,24 @@ private let baseURL = "https://strideapi-1048111785674.us-central1.run.app" // P
 private let baseURL = "http://localhost:5001" // Local development
 ```
 
-The app currently uses the production Cloud Run URL by default.
+### Permissions
+The app requires the following permissions (configured in `Info.plist`):
+- `NSLocationWhenInUseUsageDescription` — for smart routing and nearby search
+- `NSLocationAlwaysAndWhenInUseUsageDescription` — for background geofence alerts and visit detection
+- `UIBackgroundModes: [location]` — required for Woosmap SDK background tracking
 
 ## Features
 
 - ✅ User Authentication (Login/Register)
 - ✅ Secure Token Storage (Keychain)
-- ✅ API Integration (URLSession)
-- ✅ SwiftUI-based UI
-- ✅ MVVM Architecture
-- ✅ Dependency Injection
-- ✅ iOS 16.0+ Compatibility
-- ✅ Place Management (view, delete)
-- ✅ Errand Management (view, complete, delete)
+- ✅ Place Management (CRUD, collections, tags)
+- ✅ Errand Management (CRUD, priorities, deadlines)
+- ✅ Smart Errand Routing
+- ✅ Nearby Places & Errands
+- ✅ Collections Management
+- ✅ Settings (profile, password, account deletion)
+- ✅ Visit Detection (Woosmap SDK — auto-records visits when you spend time at a saved place)
+- ✅ Geofence Alerts (Woosmap SDK — local push notification with pending errands when near a saved place)
 
 ## Development Guidelines
 
@@ -160,29 +188,42 @@ The app currently uses the production Cloud Run URL by default.
 - Use Swift naming conventions
 - Follow SwiftUI best practices
 - Keep Views focused and reusable
-- Use @StateObject for ViewModel ownership
+- Use `@StateObject` for ViewModel ownership
+- Add `@MainActor` to any class that interacts with UI or `@MainActor`-isolated services
+
+### Adding a New Service
+1. Create `Stride/Services/MyService.swift` — `@MainActor final class`
+2. Add `private lazy var myService = MyService(networkService: networkService)` in `DependencyContainer`
+3. Expose as `func makeMyService() -> MyService { myService }`
 
 ### Testing
-- Unit tests can be added to Xcode test target
+- Unit tests can be added to the Xcode test target
 - Use mock services for testing ViewModels
 
 ## Troubleshooting
 
-### Build Fails
+### Build Fails After Pulling
 ```bash
-# Clean build
-xcodebuild -project Stride.xcodeproj -scheme Stride clean
+# Regenerate the Xcode project (picks up project.yml changes)
+xcodegen generate
+```
 
-# Remove derived data
+### SPM Package Not Resolving
+```bash
+# Reset package cache
+rm -rf ~/Library/Developer/Xcode/DerivedData/*
+# Then File → Packages → Reset Package Caches in Xcode
+```
+
+### Clean Build
+```bash
+xcodebuild -project Stride.xcodeproj -scheme Stride clean
 rm -rf ~/Library/Developer/Xcode/DerivedData/*
 ```
 
 ### Simulator Issues
 ```bash
-# Reset simulator
 xcrun simctl erase all
-
-# Launch specific simulator
 xcrun simctl launch booted com.preetanshumishra.stride
 ```
 

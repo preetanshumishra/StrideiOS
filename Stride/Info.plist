@@ -41,5 +41,9 @@
 	<string>Stride needs your location to find nearby places and suggest errands.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>Stride uses your location in the background for geofence alerts and visit detection.</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>location</string>
+	</array>
 </dict>
 </plist>
