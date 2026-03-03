@@ -81,3 +81,12 @@ struct NearbyView: View {
         .onAppear { viewModel.fetchNearby() }
     }
 }
+
+#Preview {
+    let vm = DependencyContainer.shared.makeNearbyViewModel()
+    vm.nearbyPlaces = PreviewData.places
+    vm.linkedErrands = [PreviewData.errand1, PreviewData.errand2]
+    return NavigationView {
+        NearbyView(viewModel: vm)
+    }
+}

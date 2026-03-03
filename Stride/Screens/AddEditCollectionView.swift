@@ -43,3 +43,14 @@ struct AddEditCollectionView: View {
         }
     }
 }
+
+#Preview {
+    NavigationView {
+        AddEditCollectionView(
+            viewModel: AddEditCollectionViewModel(
+                collectionService: DependencyContainer.shared.collectionService,
+                collection: PreviewData.collection1
+            )
+        )
+    }
+}

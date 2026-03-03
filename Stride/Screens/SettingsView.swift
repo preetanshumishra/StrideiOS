@@ -74,3 +74,10 @@ struct SettingsView: View {
         }
     }
 }
+
+#Preview {
+    let authService = DependencyContainer.shared.makeAuthService()
+    authService.user = PreviewData.user
+    let vm = DependencyContainer.shared.makeSettingsViewModel(authService: authService)
+    return SettingsView(viewModel: vm)
+}

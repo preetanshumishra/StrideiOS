@@ -129,3 +129,9 @@ struct HomeView: View {
         }
     }
 }
+
+#Preview {
+    let authService = DependencyContainer.shared.makeAuthService()
+    authService.user = PreviewData.user
+    return HomeView(viewModel: DependencyContainer.shared.makeHomeViewModel(authService: authService))
+}

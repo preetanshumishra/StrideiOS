@@ -73,3 +73,14 @@ struct CollectionsView: View {
         .task { await viewModel.loadCollections() }
     }
 }
+
+#Preview {
+    let vm = DependencyContainer.shared.makeCollectionsViewModel()
+    vm.collections = PreviewData.collections
+    return NavigationView {
+        CollectionsView(
+            viewModel: vm,
+            collectionService: DependencyContainer.shared.collectionService
+        )
+    }
+}

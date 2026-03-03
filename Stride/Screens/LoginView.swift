@@ -3,9 +3,12 @@ import SwiftUI
 struct LoginView: View {
     @ObservedObject var viewModel: LoginViewModel
     @State private var showPassword = false
+    @State private var showRegister = false
 
     var body: some View {
-        NavigationView {
+        VStack {
+            Spacer()
+
             VStack(spacing: 20) {
                 VStack(spacing: 12) {
                     Text("Stride")
@@ -20,17 +23,17 @@ struct LoginView: View {
 
                 VStack(spacing: 12) {
                     TextField("Email", text: $viewModel.email)
-                        .textFieldStyle(.roundedBorder)
                         .keyboardType(.emailAddress)
                         .autocapitalization(.none)
+                        .padding()
+                        .background(Color(.systemGray6))
+                        .cornerRadius(8)
 
                     HStack {
                         if showPassword {
                             TextField("Password", text: $viewModel.password)
-                                .textFieldStyle(.roundedBorder)
                         } else {
                             SecureField("Password", text: $viewModel.password)
-                                .textFieldStyle(.roundedBorder)
                         }
 
                         Button(action: { showPassword.toggle() }) {
@@ -38,6 +41,9 @@ struct LoginView: View {
                                 .foregroundColor(.green)
                         }
                     }
+                    .padding()
+                    .background(Color(.systemGray6))
+                    .cornerRadius(8)
                 }
 
                 if let error = viewModel.errorMessage {
@@ -63,26 +69,30 @@ struct LoginView: View {
                 .foregroundColor(.white)
                 .cornerRadius(8)
                 .disabled(viewModel.isLoading)
-
-                NavigationLink(destination: RegisterView(viewModel: DependencyContainer.shared.makeRegisterViewModel())) {
-                    HStack {
-                        Text("Don't have an account?")
-                            .foregroundColor(.gray)
-                        Text("Sign up")
-                            .foregroundColor(.green)
-                            .fontWeight(.semibold)
-                    }
-                }
-
-                Spacer()
             }
-            .padding()
-            .navigationTitle("Login")
-            .navigationViewStyle(StackNavigationViewStyle())
+
+            Spacer()
+
+            Button(action: { showRegister = true }) {
+                HStack {
+                    Text("Don't have an account?")
+                        .foregroundColor(.gray)
+                    Text("Sign up")
+                        .foregroundColor(.green)
+                        .fontWeight(.semibold)
+                }
+            }
+        }
+        .padding()
+        .sheet(isPresented: $showRegister) {
+            RegisterView(viewModel: DependencyContainer.shared.makeRegisterViewModel())
         }
     }
 }
 
 #Preview {
-    LoginView(viewModel: DependencyContainer.shared.makeLoginViewModel())
+    let vm = DependencyContainer.shared.makeLoginViewModel()
+    vm.email = "alex@stride.app"
+    vm.password = "password123"
+    return LoginView(viewModel: vm)
 }

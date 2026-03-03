@@ -98,3 +98,12 @@ struct PlacesView: View {
         }
     }
 }
+
+#Preview {
+    let vm = DependencyContainer.shared.makePlacesViewModel()
+    vm.places = PreviewData.places
+    vm.collections = PreviewData.collections
+    return NavigationView {
+        PlacesView(viewModel: vm)
+    }
+}

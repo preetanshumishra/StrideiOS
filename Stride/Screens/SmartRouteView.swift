@@ -67,3 +67,11 @@ struct SmartRouteView: View {
         .onAppear { viewModel.fetchRoute() }
     }
 }
+
+#Preview {
+    let vm = DependencyContainer.shared.makeSmartRouteViewModel()
+    vm.routedErrands = PreviewData.errands
+    return NavigationView {
+        SmartRouteView(viewModel: vm)
+    }
+}

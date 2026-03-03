@@ -98,3 +98,11 @@ struct ErrandsView: View {
         }
     }
 }
+
+#Preview {
+    let vm = DependencyContainer.shared.makeErrandsViewModel()
+    vm.errands = PreviewData.errands
+    return NavigationView {
+        ErrandsView(viewModel: vm)
+    }
+}

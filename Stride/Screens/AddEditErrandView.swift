@@ -93,3 +93,7 @@ struct AddEditErrandView: View {
         }
     }
 }
+
+#Preview {
+    AddEditErrandView(viewModel: DependencyContainer.shared.makeAddEditErrandViewModel(errand: PreviewData.errand1))
+}

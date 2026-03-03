@@ -79,3 +79,7 @@ struct AddEditPlaceView: View {
         }
     }
 }
+
+#Preview {
+    AddEditPlaceView(viewModel: DependencyContainer.shared.makeAddEditPlaceViewModel(place: PreviewData.place1))
+}

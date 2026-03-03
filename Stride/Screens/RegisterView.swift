@@ -7,69 +7,80 @@ struct RegisterView: View {
     @State private var showPassword = false
 
     var body: some View {
-        VStack(spacing: 20) {
-            VStack(spacing: 12) {
-                Text("Create Account")
-                    .font(.title2)
-                    .fontWeight(.bold)
+        VStack {
+            Spacer()
 
-                Text("Join Stride to manage your places and errands")
-                    .font(.caption)
-                    .foregroundColor(.gray)
-            }
-            .padding(.bottom, 20)
+            VStack(spacing: 20) {
+                VStack(spacing: 12) {
+                    Text("Create Account")
+                        .font(.title2)
+                        .fontWeight(.bold)
 
-            VStack(spacing: 12) {
-                TextField("First Name", text: $viewModel.firstName)
-                    .textFieldStyle(.roundedBorder)
+                    Text("Join Stride to manage your places and errands")
+                        .font(.caption)
+                        .foregroundColor(.gray)
+                }
+                .padding(.bottom, 20)
 
-                TextField("Last Name", text: $viewModel.lastName)
-                    .textFieldStyle(.roundedBorder)
+                VStack(spacing: 12) {
+                    TextField("First Name", text: $viewModel.firstName)
+                        .padding()
+                        .background(Color(.systemGray6))
+                        .cornerRadius(8)
 
-                TextField("Email", text: $viewModel.email)
-                    .textFieldStyle(.roundedBorder)
-                    .keyboardType(.emailAddress)
-                    .autocapitalization(.none)
+                    TextField("Last Name", text: $viewModel.lastName)
+                        .padding()
+                        .background(Color(.systemGray6))
+                        .cornerRadius(8)
 
-                HStack {
-                    if showPassword {
-                        TextField("Password", text: $viewModel.password)
-                            .textFieldStyle(.roundedBorder)
+                    TextField("Email", text: $viewModel.email)
+                        .keyboardType(.emailAddress)
+                        .autocapitalization(.none)
+                        .padding()
+                        .background(Color(.systemGray6))
+                        .cornerRadius(8)
+
+                    HStack {
+                        if showPassword {
+                            TextField("Password", text: $viewModel.password)
+                        } else {
+                            SecureField("Password", text: $viewModel.password)
+                        }
+
+                        Button(action: { showPassword.toggle() }) {
+                            Image(systemName: showPassword ? "eye.slash" : "eye")
+                                .foregroundColor(.green)
+                        }
+                    }
+                    .padding()
+                    .background(Color(.systemGray6))
+                    .cornerRadius(8)
+                }
+
+                if let error = viewModel.errorMessage {
+                    Text(error)
+                        .foregroundColor(.red)
+                        .font(.caption)
+                }
+
+                Button(action: {
+                    Task {
+                        await viewModel.register()
+                    }
+                }) {
+                    if viewModel.isLoading {
+                        ProgressView()
                     } else {
-                        SecureField("Password", text: $viewModel.password)
-                            .textFieldStyle(.roundedBorder)
-                    }
-
-                    Button(action: { showPassword.toggle() }) {
-                        Image(systemName: showPassword ? "eye.slash" : "eye")
-                            .foregroundColor(.green)
+                        Text("Sign Up")
                     }
                 }
+                .frame(maxWidth: .infinity)
+                .padding()
+                .background(Color.green)
+                .foregroundColor(.white)
+                .cornerRadius(8)
+                .disabled(viewModel.isLoading)
             }
-
-            if let error = viewModel.errorMessage {
-                Text(error)
-                    .foregroundColor(.red)
-                    .font(.caption)
-            }
-
-            Button(action: {
-                Task {
-                    await viewModel.register()
-                }
-            }) {
-                if viewModel.isLoading {
-                    ProgressView()
-                } else {
-                    Text("Sign Up")
-                }
-            }
-            .frame(maxWidth: .infinity)
-            .padding()
-            .background(Color.green)
-            .foregroundColor(.white)
-            .cornerRadius(8)
-            .disabled(viewModel.isLoading)
 
             Spacer()
 
@@ -84,11 +95,14 @@ struct RegisterView: View {
             }
         }
         .padding()
-        .navigationTitle("Register")
-        .navigationBarTitleDisplayMode(.inline)
     }
 }
 
 #Preview {
-    RegisterView(viewModel: DependencyContainer.shared.makeRegisterViewModel())
+    let vm = DependencyContainer.shared.makeRegisterViewModel()
+    vm.firstName = "Alex"
+    vm.lastName = "Stride"
+    vm.email = "alex@stride.app"
+    vm.password = "password123"
+    return RegisterView(viewModel: vm)
 }
