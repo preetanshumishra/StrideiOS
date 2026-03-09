@@ -56,6 +56,7 @@
 		CDC566787745C6787F3C1F2C /* PlacesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D856FD7A04808183E2B2FAA /* PlacesView.swift */; };
 		CDD26229286AD7A3FC2E444B /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DD0D74BBA39E16DDECEADBD /* AuthService.swift */; };
 		D373212F6A38B6B52731CB0A /* KeychainManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 373BB2FCE077B38A12A0A729 /* KeychainManager.swift */; };
+		DB60CA2C7DFE11AAED07DA02 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9BB01452FD4AD5A55E0153E0 /* Assets.xcassets */; };
 		E2ECD64AD87AE750F4667585 /* CollectionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0D3CB92BA816C086C2DD672 /* CollectionsView.swift */; };
 		E48E6F56AD689F793F8344D6 /* SmartRouteViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B886D588C8AA6B83BA0CA72 /* SmartRouteViewModel.swift */; };
 		E8170F484EFFCE4FB8B22F88 /* CollectionsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBD75633D62E59446DCF6F25 /* CollectionsViewModel.swift */; };
@@ -100,6 +101,7 @@
 		97ABD7AE9C2BF1E087A367FB /* ErrandRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrandRequest.swift; sourceTree = "<group>"; };
 		99A9808E40E06A4A4B4F8F6D /* AuthResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthResponse.swift; sourceTree = "<group>"; };
 		9A065EBD70B885F85B010A47 /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
+		9BB01452FD4AD5A55E0153E0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A3888EC0918F1EC3884F58AC /* PlaceService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceService.swift; sourceTree = "<group>"; };
 		A6D53BA57EFA0A59245970DB /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
 		AE1BC3413AF58CCDFB144C98 /* AddEditErrandViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddEditErrandViewModel.swift; sourceTree = "<group>"; };
@@ -272,6 +274,7 @@
 		F9C57FCE91B6EE219802156A /* Stride */ = {
 			isa = PBXGroup;
 			children = (
+				9BB01452FD4AD5A55E0153E0 /* Assets.xcassets */,
 				DE04A510C143428CC40B07AA /* Info.plist */,
 				24A1EB6D0E86A2F748FDF9F1 /* App */,
 				895F5B1C81364EBCD7C25444 /* DI */,
@@ -293,6 +296,7 @@
 			buildConfigurationList = 181609819A282DBBE71606AB /* Build configuration list for PBXNativeTarget "Stride" */;
 			buildPhases = (
 				7E6A3FC499D44183A5FC311D /* Sources */,
+				DC0F954FF0D539A730AD05D1 /* Resources */,
 				4074C35C2C40CD6B8619C080 /* Frameworks */,
 			);
 			buildRules = (
@@ -315,9 +319,10 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
 				LastUpgradeCheck = 1600;
+				TargetAttributes = {
+				};
 			};
 			buildConfigurationList = 2DF074FCB186B8F02CB7B093 /* Build configuration list for PBXProject "Stride" */;
-			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -330,6 +335,7 @@
 				FE4045C16D774DEB840CE491 /* XCRemoteSwiftPackageReference "geofencing-ios-sdk-spm-release" */,
 			);
 			preferredProjectObjectVersion = 77;
+			productRefGroup = 0463BF9A3F8E446B44A2BD77 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
@@ -337,6 +343,17 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		DC0F954FF0D539A730AD05D1 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DB60CA2C7DFE11AAED07DA02 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		7E6A3FC499D44183A5FC311D /* Sources */ = {
