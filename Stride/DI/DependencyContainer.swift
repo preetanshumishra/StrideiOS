@@ -5,6 +5,7 @@ final class DependencyContainer {
     static let shared = DependencyContainer()
 
     private lazy var networkService = NetworkService()
+    private lazy var authService = AuthService(networkService: networkService)
     private lazy var locationManager = LocationManager()
     private lazy var routeService = RouteService(networkService: networkService)
     private lazy var nearbyService = NearbyService(networkService: networkService)
@@ -24,7 +25,7 @@ final class DependencyContainer {
     }
 
     func makeAuthService() -> AuthService {
-        AuthService(networkService: networkService)
+        authService
     }
 
     func makePlaceService() -> PlaceService {
