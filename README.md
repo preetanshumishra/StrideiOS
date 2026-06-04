@@ -16,7 +16,6 @@ Stride iOS is a native iOS app providing intelligent errand and place management
 - **Secure Storage:** iOS Keychain (native)
 - **Location SDK:** WoosmapGeofencing (SPM) — visit detection + custom geofencing
 - **Notifications:** UNUserNotificationCenter — local push alerts on geofence entry
-- **Project Management:** XcodeGen
 
 ## Project Structure
 
@@ -67,7 +66,6 @@ StrideiOS/
 │   │   └── LocationManager.swift
 │   └── Info.plist
 ├── Stride.xcodeproj/
-├── project.yml                       # XcodeGen configuration (includes SPM packages)
 └── .gitignore
 ```
 
@@ -78,7 +76,6 @@ StrideiOS/
 - macOS 12.0 or later
 - Xcode 15.0 or later
 - iOS 16.0+ device or simulator
-- XcodeGen (`brew install xcodegen`)
 
 ### Installation
 
@@ -87,30 +84,22 @@ StrideiOS/
    cd StrideiOS
    ```
 
-2. **Regenerate the Xcode project (resolves SPM packages):**
-   ```bash
-   npx xcodegen generate
-   # or: xcodegen generate
-   ```
-
-3. **Open project (SPM packages are resolved automatically):**
+2. **Open project (SPM packages are resolved automatically):**
    ```bash
    open Stride.xcodeproj
    ```
 
-4. **Select target and build:**
+3. **Select target and build:**
    - Select "Stride" scheme
    - Select iOS Simulator or device
    - Press Cmd+B to build or Cmd+R to run
-
-> **Note:** Always run `xcodegen generate` after pulling changes that modify `project.yml` (e.g., new SPM packages).
 
 ## Build & Run
 
 ### Using Xcode
 ```bash
-# Regenerate project and open
-xcodegen generate && open Stride.xcodeproj
+# Open the project
+open Stride.xcodeproj
 
 # Build from command line
 xcodebuild -project Stride.xcodeproj -scheme Stride -configuration Debug
@@ -201,12 +190,6 @@ The app requires the following permissions (configured in `Info.plist`):
 - Use mock services for testing ViewModels
 
 ## Troubleshooting
-
-### Build Fails After Pulling
-```bash
-# Regenerate the Xcode project (picks up project.yml changes)
-xcodegen generate
-```
 
 ### SPM Package Not Resolving
 ```bash
